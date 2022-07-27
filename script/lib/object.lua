@@ -1,22 +1,22 @@
 local M = {}
 
-M.object = { fields = { }, handle_manager = { pool = { }, ptr = 0 } }
+M.Object = { fields = { }, handle_manager = { pool = { }, ptr = 0 } }
 
-function M.object.init_class(cls)
+function M.Object.init_class(cls)
   cls.meta = {
     pool = {},
     pool_ptr = 0
   }
 end
 
-function M.object.new(cls)
+function M.Object.new(cls)
   local result = { class = cls }
   setmetatable(result, { __index = cls.fields })
   result:init()
   return result
 end
 
-function M.object.create(cls)
+function M.Object.create(cls)
   if cls.meta.pool_ptr == 0 then
     cls.handle_manager.ptr = cls.handle_manager.ptr + 1
     local result = cls:new()
@@ -30,13 +30,13 @@ function M.object.create(cls)
   end
 end
 
-function M.object.release(cls, obj)
+function M.Object.release(cls, obj)
   obj:clear()
   cls.meta.pool_ptr = cls.meta.pool_ptr + 1
   cls.meta.pool[cls.meta.pool_ptr] = obj
 end
 
-function M.object.inherit(cls, fields)
+function M.Object.inherit(cls, fields)
   local result = {}
   for k, v in pairs(cls) do
     result[k] = v
@@ -52,17 +52,17 @@ function M.object.inherit(cls, fields)
   return result
 end
 
-function M.object.get_by_handle(cls, handle)
+function M.Object.get_by_handle(cls, handle)
   return cls.handle_manager.pool[handle]
 end
 
-function M.object.fields.init(self)
+function M.Object.fields.init(self)
 end
 
-function M.object.fields.clear(self)
+function M.Object.fields.clear(self)
 end
 
-function M.object.fields.release(self)
+function M.Object.fields.release(self)
   self.class:release(self)
 end
 

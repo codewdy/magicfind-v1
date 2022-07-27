@@ -1,8 +1,8 @@
 local M = {}
 
-local object = require("lib.object").object
+local Object = require("lib.object").Object
 
-M.list = object:inherit({
+M.List = Object:inherit({
   init = function(self)
     self.vec = {}
     self.size = 0
@@ -46,8 +46,8 @@ M.list = object:inherit({
   end,
 })
 
-function M.object_list(cls)
-  return M.list:inherit({
+function M.ObjectList(cls)
+  return M.List:inherit({
     init_unit = function(self)
       return cls:create()
     end,
