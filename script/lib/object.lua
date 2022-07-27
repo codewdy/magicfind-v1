@@ -37,7 +37,7 @@ M.Object = {
     cls.meta.pool[cls.meta.pool_ptr] = obj
   end,
 
-  inherit = function(cls, fields)
+  extend = function(cls, fields)
     local result = {}
     for k, v in pairs(cls) do
       result[k] = v
