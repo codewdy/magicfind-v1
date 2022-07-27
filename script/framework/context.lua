@@ -19,4 +19,3 @@ M.Context = Object:inherit({
 M.context = M.Context:create()
 
 return M
-
