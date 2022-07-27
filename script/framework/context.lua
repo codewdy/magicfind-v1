@@ -10,12 +10,8 @@ M.GameState = Enum({
   "Death"
 })
 
-M.Context = Object:inherit({
-  init = function(self)
-    self.state = M.GameState.Prepare
-  end,
-})
-
-M.context = M.Context:create()
+M.Context = {
+  state = M.GameState.Prepare,
+}
 
 return M
