@@ -8,7 +8,7 @@ M.list = object:inherit({
     self.size = 0
   end,
 
-  recycle = function(self)
+  clear = function(self)
     self:resize(0)
   end,
 
@@ -36,9 +36,9 @@ M.list = object:inherit({
       end
       self.size = size
     elseif self.size > size then
-      if self.recycle_unit ~= nil then
+      if self.clear_unit ~= nil then
         for i = size + 1, self.size do
-          self.vec[i] = self:recycle_unit(self.vec[i])
+          self.vec[i] = self:clear_unit(self.vec[i])
         end
       end
       self.size = size
@@ -51,7 +51,7 @@ function M.object_list(cls)
     init_unit = function(self)
       return cls:create()
     end,
-    recycle_unit = function(self, unit)
+    clear_unit = function(self, unit)
       unit:release()
       return unit
     end

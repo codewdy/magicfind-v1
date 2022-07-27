@@ -31,7 +31,7 @@ function M.object.create(cls)
 end
 
 function M.object.release(cls, obj)
-  obj:recycle()
+  obj:clear()
   cls.meta.pool_ptr = cls.meta.pool_ptr + 1
   cls.meta.pool[cls.meta.pool_ptr] = obj
 end
@@ -59,7 +59,7 @@ end
 function M.object.fields.init(self)
 end
 
-function M.object.fields.recycle(self)
+function M.object.fields.clear(self)
 end
 
 function M.object.fields.release(self)
