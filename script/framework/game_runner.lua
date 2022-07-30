@@ -1,59 +1,79 @@
 local M = {}
 
 local Object = require("lib.object").Object
-local GameState = require("framework.context").GameState
-local StaticClass = require("lib.static_class").StaticClass
+local Singleton = require("lib.singleton").Singleton
+local Enum = require("lib.enum").Enum
 
-M.GameRunner = StaticClass({
-  run = function(cls, ctx)
-    local state = GameState.Prepare
+M.GameState = Enum({
+  "Prepare",
+  "PathFinding",
+  "Battle",
+  "Death"
+})
+
+M.GameRunner = Singleton({
+  update = function(self, ctx)
+    local state = M.GameState.Prepare
     if (ctx.change_to_state ~= nil) then
       state = ctx.change_to_state
       ctx.change_to_state = nil
     else
-      state = cls.processor[ctx.state].run(ctx)
+      state = self.processor[ctx.state].run(ctx)
     end
     if state ~= ctx.state then
-      cls.processor[ctx.state].stop(ctx)
+      self.processor[ctx.state].stop(ctx)
       ctx.state = state
-      cls.processor[ctx.state].start(ctx)
+      self.processor[ctx.state].start(ctx)
     end
   end,
 
-  change_to_state = function(cls, ctx, state)
+  change_state = function(self, ctx, state)
     ctx.change_to_state = state
   end,
 
   processor = {
-    [GameState.Init] = {
+    [M.GameState.Prepare] = {
       start = function(ctx) end,
       stop = function(ctx) end,
       run = function(ctx)
-        return GameState.PathFinding
+        if ctx.player ~= nil then
+          ctx.player:recycle()
+        end
+        ctx.player = ctx:load_player(ctx.player_filename)
+        return M.GameState.PathFinding
       end
     },
-    [GameState.PathFinding] = {
+    [M.GameState.PathFinding] = {
+      start = function(ctx)
+        ctx.path_finding_countdown = ctx.player:path_finding_time()
+      end,
+      stop = function(ctx) end,
+      run = function(ctx)
+        ctx.path_finding_countdown = ctx.path_finding_countdown - 1
+        if ctx.path_finding_countdown <= 0 then
+          return M.GameState.Battle
+        else
+          return M.GameState.PathFinding
+        end
+      end
+    },
+    [M.GameState.Battle] = {
+      start = function(ctx)
+        ctx.level = ctx.player:current_level()
+      end,
+      stop = function(ctx) end,
+      run = function(ctx)
+        return M.GameState.Battle
+      end
+    },
+    [M.GameState.Death] = {
       start = function(ctx) end,
       stop = function(ctx) end,
       run = function(ctx)
-        return GameState.Battle
+        return M.GameState.PathFinding
       end
     },
-    [GameState.Battle] = {
-      start = function(ctx) end,
-      stop = function(ctx) end,
-      run = function(ctx)
-        return GameState.Battle
-      end
-    },
-    [GameState.Death] = {
-      start = function(ctx) end,
-      stop = function(ctx) end,
-      run = function(ctx)
-        return GameState.PathFinding
-      end
-    },
-  }
+  },
 })
 
 return M
