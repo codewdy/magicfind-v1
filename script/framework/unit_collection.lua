@@ -39,6 +39,11 @@ M.UnitCollection = Object:extend({
       self.own_units:push_back(unit)
     end
   end,
+  add_units = function(self, units, own)
+    for i=1,units.size do
+      self:add_unit(units.vec[i], own)
+    end
+  end,
 })
 
 return M

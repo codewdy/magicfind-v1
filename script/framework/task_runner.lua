@@ -37,10 +37,12 @@ M.TaskRunner = Object:extend({
       end
       task:recycle()
     end
+  end,
+  forward = function(self)
     self.current = self.current + 1
   end,
   abort = function(self)
-    for _,task in self.tasks do
+    for _,task in pairs(self.tasks) do
       for i=1,task.size do
         task.vec[i]:abort()
       end

@@ -3,6 +3,7 @@ local M = {}
 local Object = require("lib.object").Object
 local Singleton = require("lib.singleton").Singleton
 local Enum = require("lib.enum").Enum
+local BattleRunner = require("framework.battle_runner").BattleRunner
 
 M.GameState = Enum({
   "Prepare",
@@ -59,11 +60,20 @@ M.GameRunner = Singleton({
     },
     [M.GameState.Battle] = {
       start = function(ctx)
-        ctx.level = ctx.player:current_level()
+        BattleRunner:start(ctx)
       end,
-      stop = function(ctx) end,
+      stop = function(ctx)
+        BattleRunner:abort(ctx)
+      end,
       run = function(ctx)
-        return M.GameState.Battle
+        BattleRunner:update(ctx)
+        if BattleRunner:level_fail(ctx) then
+          return M.GameState.Death
+        elseif BattleRunner:level_clear(ctx) then
+          return M.GameState.PathFinding
+        else
+          return M.GameState.Battle
+        end
       end
     },
     [M.GameState.Death] = {

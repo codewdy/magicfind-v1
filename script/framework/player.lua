@@ -1,10 +1,10 @@
 local M = {}
 
-local Object = require("lib.object").Object
+local Unit = require("framework.unit").Unit
 
-M.Player = Object:extend({
+M.Player = Unit:extend({
   path_finding_time = function(self)
-    return 100
+    return 10
   end,
   current_level = function(self)
     return 1
