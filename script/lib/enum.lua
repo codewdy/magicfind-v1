@@ -6,6 +6,7 @@ function M.Enum(enums)
     result[id] = key
     result[key] = id
   end
+  result.enums = enums
   return result
 end
 
