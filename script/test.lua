@@ -5,7 +5,10 @@ Invoke("logger.init", "a", 1)
 for i = 1,10000 do
   StartInvoke()
   local result = Invoke("game.run_one_frame")
-  print(result.vec[1])
+  for j = 1,result.size do
+    print(result.vec[j])
+  end
+  print()
 end
 
 --[[
