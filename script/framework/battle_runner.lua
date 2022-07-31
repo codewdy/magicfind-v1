@@ -8,10 +8,11 @@ local UnitGroup = require("framework.unit").UnitGroup
 M.BattleRunner = Singleton({
   start = function(self, ctx)
     ctx.level = ctx.player:current_level()
+    ctx.units:add_unit_not_owned(ctx.player)
     if ctx.level % 5 == 0 then
-      -- ctx.units:add_units(MonsterPack:create_pack(MonsterPack.Type.Boss), true)
+      MonsterPack:create_pack(MonsterPack.Type.Boss, ctx.units)
     else
-      -- ctx.units:add_units(MonsterPack:create_pack(MonsterPack.Type.Normal), true)
+      MonsterPack:create_pack(MonsterPack.Type.Normal, ctx.units)
     end
   end,
   abort = function(self, ctx)

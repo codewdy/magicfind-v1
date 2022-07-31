@@ -33,17 +33,13 @@ M.UnitCollection = Object:extend({
       end
     end
   end,
-  add_unit = function(self, unit, own)
+  add_unit = function(self, unit)
     self.units[unit.group]:push_back(unit)
-    if own then
-      self.own_units:push_back(unit)
-    end
+    self.own_units:push_back(unit)
   end,
-  add_units = function(self, units, own)
-    for i=1,units.size do
-      self:add_unit(units.vec[i], own)
-    end
-  end,
+  add_unit_not_owned = function(self, unit)
+    self.units[unit.group]:push_back(unit)
+  end
 })
 
 return M

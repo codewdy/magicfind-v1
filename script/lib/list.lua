@@ -44,6 +44,9 @@ M.List = Object:extend({
       self.size = size
     end
   end,
+  random_one = function(self)
+    return self.vec[math.random(self.size)]
+  end
 })
 
 function M.ObjectList(cls)
