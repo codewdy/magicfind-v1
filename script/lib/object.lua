@@ -3,11 +3,16 @@ local M = {}
 M.Object = {
   handle_manager = { pool = { }, ptr = 0 },
 
-  init_class = function(cls)
+  init_class = function(cls, static_fields)
     cls.meta = {
       pool = {},
       pool_ptr = 0
     }
+    if static_fields ~= nil then
+      for k,v in pairs(static_fields) do
+        cls[k] = v
+      end
+    end
   end,
 
   new = function(cls)
@@ -37,7 +42,7 @@ M.Object = {
     cls.meta.pool[cls.meta.pool_ptr] = obj
   end,
 
-  extend = function(cls, fields)
+  extend = function(cls, fields, static_fields)
     local result = {}
     for k, v in pairs(cls) do
       result[k] = v
@@ -49,7 +54,7 @@ M.Object = {
     for k, v in pairs(fields) do
       result.fields[k] = v
     end
-    result:init_class()
+    result:init_class(static_fields)
     return result
   end,
 

@@ -8,6 +8,16 @@ M.UnitGroup = Enum({
   "Enemy"
 })
 
+M.UnitPrototype = Object:extend({
+  init = function(self)
+  end,
+  set_value = function(self, dict)
+    for k,v in pairs(dict) do
+      self[k] = v
+    end
+  end
+})
+
 M.Unit = Object:extend({
   init = function(self)
     self.pos_x = 0.0
@@ -28,6 +38,16 @@ M.Unit = Object:extend({
     if self.hp < 0 then
       self.death = true
     end
+  end
+}, {
+  Type = {},
+  extend = function(cls, fields)
+    local prototype = M.UnitPrototype:create()
+    prototype:set_value(fields)
+    fields.prototype = prototype
+    local result = Object.extend(cls, fields)
+    M.Unit.Type[fields.name] = result
+    return result
   end
 })
 
