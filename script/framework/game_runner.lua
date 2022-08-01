@@ -14,6 +14,7 @@ M.GameState = Enum({
 
 M.GameRunner = Singleton({
   update = function(self, ctx)
+    ctx.effects:clear()
     local state = M.GameState.Prepare
     if (ctx.change_to_state ~= nil) then
       state = ctx.change_to_state

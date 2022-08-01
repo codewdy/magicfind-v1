@@ -1,5 +1,13 @@
 require("main")
 
+local Effect = require("framework.effect").Effect
+
+
+local X = Effect:extend({
+  size = 3,
+  name = "AAA"
+})
+
 StartInvoke()
 Invoke("logger.init", "a", 1)
 for i = 1,10000 do
