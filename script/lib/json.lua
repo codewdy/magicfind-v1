@@ -37,6 +37,7 @@ function M.dump(obj)
   if type(obj) == 'function' then
     return '"<function>"'
   end
+  error("cannot parse type " .. type(obj))
 end
 
 return M

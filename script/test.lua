@@ -1,23 +1,29 @@
 require("main")
 
 local Effect = require("framework.effect").Effect
+local Skeleton = require("content.unit.skeleton").Skeleton
 
+function InvokeAndPrint(func, ...)
+  StartInvoke()
+  print("Invoking: ", func)
+  local result = Invoke(func, ...)
+  for j = 1,result.size do
+    print(result.vec[j])
+  end
+  print()
+end
 
 local X = Effect:extend({
   size = 3,
   name = "AAA"
 })
 
-StartInvoke()
-Invoke("logger.init", "a", 1)
-for i = 1,10000 do
-  StartInvoke()
-  local result = Invoke("game.run_one_frame")
-  for j = 1,result.size do
-    print(result.vec[j])
-  end
-  print()
+InvokeAndPrint("logger.init", "a", 1)
+for i = 1,1000 do
+  InvokeAndPrint("game.run_one_frame")
 end
+
+InvokeAndPrint("game.get_prototype", Skeleton.prototype.handle)
 
 --[[
 local Object = require("lib.object").Object

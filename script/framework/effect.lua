@@ -1,17 +1,7 @@
 local M = {}
 
 local Object = require("lib.object").Object
-
-M.EffectPrototype = Object:extend({
-  init = function(self)
-    self.dict = {}
-  end,
-  set_value = function(self, dict)
-    for k,v in pairs(dict) do
-      self.dict[k] = v
-    end
-  end
-})
+local Prototype = require("framework.prototype").Prototype
 
 local build_function = {
   [0] = function(cls)
@@ -73,10 +63,10 @@ M.Effect = Object:extend({
 }, {
   Type = {},
   extend = function(cls, fields)
-    local prototype = M.EffectPrototype:create()
+    local prototype = Prototype:create()
     prototype:set_value(fields)
     fields.prototype = prototype
-    local result = Object.extend(cls, fields)
+    local result = Object.extend(cls, fields, { prototype = prototype })
     result.build = build_function[fields.size]
     return result
   end

@@ -2,21 +2,11 @@ local M = {}
 
 local Object = require("lib.object").Object
 local Enum = require("lib.enum").Enum
+local Prototype = require("framework.prototype").Prototype
 
 M.UnitGroup = Enum({
   "Player",
   "Enemy"
-})
-
-M.UnitPrototype = Object:extend({
-  init = function(self)
-    self.dict = {}
-  end,
-  set_value = function(self, dict)
-    for k,v in pairs(dict) do
-      self.dict[k] = v
-    end
-  end
 })
 
 M.Unit = Object:extend({
@@ -43,10 +33,10 @@ M.Unit = Object:extend({
 }, {
   Type = {},
   extend = function(cls, fields)
-    local prototype = M.UnitPrototype:create()
+    local prototype = Prototype:create()
     prototype:set_value(fields)
     fields.prototype = prototype
-    local result = Object.extend(cls, fields)
+    local result = Object.extend(cls, fields, { prototype = prototype })
     M.Unit.Type[fields.name] = result
     return result
   end
