@@ -2,6 +2,7 @@ require("main")
 
 local Effect = require("framework.effect").Effect
 local Skeleton = require("content.unit.skeleton").Skeleton
+local json = require("lib.json")
 
 function InvokeAndPrint(func, ...)
   StartInvoke()
@@ -15,7 +16,8 @@ end
 
 local X = Effect:extend({
   size = 3,
-  name = "AAA"
+  name = "AAA",
+  skeleton = Skeleton:create()
 })
 
 InvokeAndPrint("logger.init", "a", 1)
@@ -24,6 +26,9 @@ for i = 1,1000 do
 end
 
 InvokeAndPrint("game.get_prototype", Skeleton.prototype.handle)
+InvokeAndPrint("game.get_prototype", X.prototype.handle)
+
+print(Skeleton.prototype.handle)
 
 --[[
 local Object = require("lib.object").Object

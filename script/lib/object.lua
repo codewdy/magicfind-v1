@@ -16,7 +16,7 @@ M.Object = {
   end,
 
   new = function(cls)
-    local result = { class = cls }
+    local result = { }
     setmetatable(result, { __index = cls.fields })
     result:init()
     return result
@@ -54,6 +54,7 @@ M.Object = {
     for k, v in pairs(fields) do
       result.fields[k] = v
     end
+    result.fields.class = result
     result:init_class(static_fields)
     return result
   end,
@@ -71,6 +72,10 @@ M.Object = {
 
     release = function(self)
       self.class:release(self)
+    end,
+
+    serialize = function(self)
+      return "<object " .. tostring(self.handle) .. ">"
     end,
   },
 }

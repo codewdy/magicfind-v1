@@ -14,6 +14,9 @@ function M.dump_string(obj)
 end
 
 function M.dump_table(obj)
+  if obj.serialize ~= nil then
+    return M.dump(obj:serialize())
+  end
   local result = ""
   for k,v in pairs(obj) do
     result = result .. M.dump(k) .. ':' .. M.dump(v) .. ','
