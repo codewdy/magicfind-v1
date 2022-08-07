@@ -14,9 +14,9 @@ M.BuffManager = Object:extend({
     end
     self.activated_buff:clear()
   end,
-  update = function(self, unit)
+  update_status = function(self, status)
     for i = 1,self.activated_buff.size do
-      self.activated_buff.vec[i]:update(unit)
+      self.activated_buff.vec[i]:update_status(status)
     end
   end,
   apply = function(self, cls, level, duration)

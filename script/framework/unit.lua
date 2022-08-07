@@ -28,11 +28,11 @@ M.Unit = Object:extend({
   pre_update = function(self)
     -- self.status:clear()
     for i=1,self.prototype.talents.size do
-      self.prototype.talents.vec[i]:update(self.status)
+      self.prototype.talents.vec[i]:update_status(self.status)
     end
-    self.buff_manager:update(self.status)
+    self.buff_manager:update_status(self.status)
     for i=1,self.prototype.talents.size do
-      self.prototype.talents.vec[i]:post_update(self.status)
+      self.prototype.talents.vec[i]:post_update_status(self.status)
     end
   end,
   update = function(self)

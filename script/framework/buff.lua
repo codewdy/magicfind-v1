@@ -20,6 +20,11 @@ M.Buff = Object:extend({
   clear = function(self)
     self.activated = false
   end,
+  update_status = function(self, status)
+    if self:update_level() then
+      status:append(self)
+    end
+  end,
 }, {
   extend = function(cls, fields)
     local prototype = Prototype:create()
@@ -39,7 +44,7 @@ M.SimpleBuff = Object:extend({
   end,
   apply = function(self, level, duration)
   end,
-  update = function(self, unit)
+  update_level = function(self)
   end,
 })
 
@@ -52,7 +57,7 @@ M.StackBuff = Object:extend({
   end,
   apply = function(self, level, duration)
   end,
-  update = function(self, unit)
+  update_level = function(self)
   end,
 })
 
@@ -65,7 +70,7 @@ M.NonstackBuff = Object:extend({
   end,
   apply = function(self, level, duration)
   end,
-  update = function(self, unit)
+  update_level = function(self)
   end,
 })
 
