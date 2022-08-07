@@ -5,6 +5,7 @@ local List = require("lib.list").List
 local Enum = require("lib.enum").Enum
 local Prototype = require("framework.prototype").Prototype
 local BuffManager = require("framework.buff_manager").BuffManager
+local Status = require("framework.status").Status
 
 M.UnitGroup = Enum({
   "Player",
@@ -20,13 +21,14 @@ M.Unit = Object:extend({
     self.hp = 1
     self.maxHp = 1
     self.buff_manager = BuffManager:create()
+    self.status = Status:create()
   end,
   clear = function(self)
     self.death = false
     self.buff_manager:clear()
   end,
   pre_update = function(self)
-    -- self.status:clear()
+    self.status:clear()
     for i=1,self.prototype.talents.size do
       self.prototype.talents.vec[i]:update_status(self.status)
     end
