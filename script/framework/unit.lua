@@ -6,6 +6,7 @@ local Enum = require("lib.enum").Enum
 local Prototype = require("framework.prototype").Prototype
 local BuffManager = require("framework.buff_manager").BuffManager
 local Status = require("framework.status").Status
+local SkillCooldown = require("framework.skill_cooldown").SkillCooldown
 
 M.UnitGroup = Enum({
   "Player",
@@ -22,10 +23,12 @@ M.Unit = Object:extend({
     self.maxHp = 1
     self.buff_manager = BuffManager:create()
     self.status = Status:create()
+    self.skill_cooldown = SkillCooldown:create()
   end,
   clear = function(self)
     self.death = false
     self.buff_manager:clear()
+    self.skill_cooldown:clear()
   end,
   pre_update = function(self)
     self.status:clear()
@@ -33,11 +36,18 @@ M.Unit = Object:extend({
       self.prototype.talents.vec[i]:update_status(self.status)
     end
     self.buff_manager:update_status(self.status)
+    for i=1,self.prototype.skills.size do
+      self.prototype.skills.vec[i].idx = i
+      self.prototype.skills.vec[i]:update_status(self.status)
+    end
     for i=1,self.prototype.talents.size do
       self.prototype.talents.vec[i]:post_update_status(self.status)
     end
   end,
   update = function(self)
+    for i=1,self.status.on_update.size do
+      self.status.on_update.vec[i]:on_update(self)
+    end
   end,
   post_update = function(self)
     if self.hp < 0 then
@@ -48,6 +58,7 @@ M.Unit = Object:extend({
   Type = {},
   default_prototype = {
     talents = List:create(),
+    skills = List:create(),
   },
   extend = function(cls, fields)
     local prototype = Prototype:create()

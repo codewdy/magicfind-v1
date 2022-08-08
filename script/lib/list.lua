@@ -61,4 +61,12 @@ function M.ObjectList(cls)
   })
 end
 
+function M.MakeList(lst)
+  local result = M.List:create()
+  for _,v in ipairs(lst) do
+    result:push_back(v)
+  end
+  return result
+end
+
 return M

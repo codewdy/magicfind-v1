@@ -1,6 +1,9 @@
 local M = {}
 
 local Unit = require("framework.unit").Unit
+local MakeList = require("lib.list").MakeList
+local CooldownSkill = require("framework.skill_arg").CooldownSkill
+local DebugSkill = require("content.skill.debug_skill").DebugSkill
 
 M.Player = Unit:extend({
   name = "Player",
@@ -15,6 +18,7 @@ M.Player = Unit:extend({
   end,
   load = function(self, ctx, filename)
   end,
+  skills = MakeList({ CooldownSkill(DebugSkill, 10) })
 })
 
 return M
